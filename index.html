@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocab Deck — карточки для изучения английского</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --desk-1:#2b2015;
+    --desk-2:#20160e;
+    --card-paper:#f6efdc;
+    --card-paper-2:#efe6ce;
+    --ink:#241a11;
+    --ink-soft:#5c4d3a;
+    --rule-blue:rgba(72,98,148,.28);
+    --margin-red:#c1443b;
+    --amber:#c98a3b;
+    --amber-deep:#9c672a;
+    --sage:#6e8b63;
+    --sage-deep:#4f6b46;
+    --paper-shadow: 0 30px 60px -20px rgba(0,0,0,.55);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 30% -10%, rgba(255,220,170,.06), transparent 55%),
+      linear-gradient(160deg, var(--desk-1), var(--desk-2));
+    font-family:'Inter',sans-serif;
+    color:#f0e9db;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:32px 16px 48px;
+    overflow-x:hidden;
+  }
+  .top{
+    width:100%;
+    max-width:520px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:8px;
+  }
+  .brand h1{
+    font-family:'Caveat',cursive;
+    font-size:42px;
+    font-weight:700;
+    margin:0;
+    line-height:1;
+    color:#f6efdc;
+    letter-spacing:.5px;
+  }
+  .brand p{
+    margin:4px 0 0;
+    font-size:13px;
+    color:#b8a98f;
+  }
+  .reset-btn{
+    background:none;
+    border:1px solid rgba(240,233,219,.25);
+    color:#cfc2a9;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    padding:6px 10px;
+    border-radius:20px;
+    cursor:pointer;
+    letter-spacing:.03em;
+    transition:border-color .15s, color .15s;
+  }
+  .reset-btn:hover{border-color:#e0b573;color:#f0e9db;}
+
+  .counter{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:#cfc2a9;
+    width:100%;
+    max-width:520px;
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .progress-track{
+    width:100%;
+    max-width:520px;
+    height:3px;
+    background:rgba(240,233,219,.12);
+    border-radius:3px;
+    margin-bottom:34px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg,var(--amber),var(--sage));
+    width:0%;
+    transition:width .4s ease;
+  }
+
+  .stage{
+    position:relative;
+    width:320px;
+    height:430px;
+    margin-bottom:28px;
+  }
+  .ghost{
+    position:absolute;
+    inset:0;
+    background:var(--card-paper-2);
+    border-radius:14px;
+    box-shadow:var(--paper-shadow);
+  }
+  .ghost.g1{transform:rotate(-4deg) translateY(6px);opacity:.55;}
+  .ghost.g2{transform:rotate(3deg) translateY(10px);opacity:.35;}
+
+  .card{
+    position:absolute;
+    inset:0;
+    perspective:1400px;
+    cursor:pointer;
+    transition:transform .45s cubic-bezier(.3,.8,.4,1), opacity .45s ease;
+  }
+  .card.sort-left{ transform: translate(-160%, 40px) rotate(-24deg); opacity:0; }
+  .card.sort-right{ transform: translate(160%, 40px) rotate(24deg); opacity:0; }
+
+  .card-inner{
+    position:relative;
+    width:100%;
+    height:100%;
+    transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.4,.2,.2,1);
+    border-radius:14px;
+    box-shadow:var(--paper-shadow);
+  }
+  .card.flipped .card-inner{transform:rotateY(180deg);}
+
+  .face{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    border-radius:14px;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0 39px,
+        var(--rule-blue) 39px 40px
+      ),
+      var(--card-paper);
+    padding:26px 22px 22px 40px;
+    display:flex;
+    flex-direction:column;
+  }
+  .face::before{
+    content:"";
+    position:absolute;
+    top:0; bottom:0; left:24px;
+    width:1.5px;
+    background:var(--margin-red);
+    opacity:.55;
+  }
+  .hole{
+    position:absolute;
+    top:14px;
+    width:12px; height:12px;
+    border-radius:50%;
+    background:var(--desk-2);
+    box-shadow:inset 0 2px 3px rgba(0,0,0,.5);
+  }
+  .hole.h1{left:12px;}
+  .hole.h2{right:12px;}
+
+  .tag{
+    align-self:flex-end;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:3px 8px;
+    border-radius:20px;
+    color:#fff;
+  }
+  .tag.work{background:var(--amber-deep);}
+  .tag.travel{background:#3f7d8c;}
+  .tag.general{background:#6b5d8f;}
+
+  .idx{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-top:14px;
+  }
+
+  .front-word{
+    font-family:'Caveat',cursive;
+    font-weight:700;
+    font-size:56px;
+    color:var(--ink);
+    margin-top:auto;
+    margin-bottom:auto;
+    line-height:1;
+  }
+  .front-hint{
+    font-size:11px;
+    color:var(--ink-soft);
+    font-family:'Inter',sans-serif;
+  }
+
+  .back{
+    transform:rotateY(180deg);
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0 39px,
+        var(--rule-blue) 39px 40px
+      ),
+      var(--card-paper);
+    justify-content:center;
+  }
+  .back-ru{
+    font-family:'Caveat',cursive;
+    font-weight:700;
+    font-size:44px;
+    color:#1b2a4a;
+    margin-bottom:14px;
+  }
+  .back-example{
+    font-size:14px;
+    color:var(--ink-soft);
+    line-height:1.5;
+    font-style:italic;
+  }
+
+  .controls{
+    display:flex;
+    gap:16px;
+    margin-bottom:10px;
+  }
+  .sort-btn{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    padding:12px 20px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    color:#fff;
+    transition:transform .12s ease, filter .12s ease;
+  }
+  .sort-btn:hover{transform:translateY(-2px);filter:brightness(1.08);}
+  .sort-btn:active{transform:translateY(0);}
+  .sort-btn.learn{background:var(--amber-deep);}
+  .sort-btn.know{background:var(--sage-deep);}
+  .sort-btn:focus-visible{outline:2px solid #f0e9db;outline-offset:2px;}
+
+  .hint-text{
+    font-size:12px;
+    color:#8f8067;
+    margin-bottom:26px;
+  }
+
+  .piles{
+    display:flex;
+    gap:28px;
+    align-items:center;
+  }
+  .pile{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:#cfc2a9;
+  }
+  .pile-stack{
+    width:36px;
+    height:26px;
+    border-radius:4px;
+    position:relative;
+  }
+  .pile-stack.learn{background:var(--amber);}
+  .pile-stack.know{background:var(--sage);}
+  .pile-stack::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    top:-4px;
+    left:2px;
+    right:-2px;
+    border-radius:4px;
+    background:inherit;
+    opacity:.5;
+    z-index:-1;
+  }
+
+  .end-screen{
+    width:320px;
+    text-align:center;
+    padding:40px 24px;
+    background:var(--card-paper);
+    border-radius:14px;
+    box-shadow:var(--paper-shadow);
+    color:var(--ink);
+  }
+  .end-screen h2{
+    font-family:'Caveat',cursive;
+    font-size:38px;
+    margin:0 0 6px;
+  }
+  .end-screen p{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin:0 0 22px;
+    line-height:1.5;
+  }
+  .end-actions{display:flex;flex-direction:column;gap:10px;}
+  .end-btn{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    color:#fff;
+  }
+  .end-btn.primary{background:var(--sage-deep);}
+  .end-btn.secondary{background:transparent;border:1px solid #cbbfa3;color:var(--ink);}
+
+  .loading{
+    color:#cfc2a9;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    padding:80px 0;
+  }
+
+  @media (max-width:380px){
+    .stage{width:280px;height:390px;}
+    .front-word{font-size:44px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .card, .card-inner, .progress-fill{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="brand">
+    <h1>Vocab Deck</h1>
+    <p>карточки для работы и карьеры · A2→B1</p>
+  </div>
+  <button class="reset-btn" id="resetBtn">сбросить прогресс</button>
+</div>
+
+<div class="counter" id="counter">Загрузка…</div>
+<div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+<div id="app"><div class="loading">Раскладываю колоду…</div></div>
+
+<script>
+const WORDS = [
+  {id:1, en:"achieve", ru:"достигать", ex:"She wants to achieve her goals this year.", cat:"work"},
+  {id:2, en:"deadline", ru:"крайний срок", ex:"We need to meet the deadline on Friday.", cat:"work"},
+  {id:3, en:"improve", ru:"улучшать", ex:"I want to improve my English skills.", cat:"general"},
+  {id:4, en:"colleague", ru:"коллега", ex:"My colleague helped me with the report.", cat:"work"},
+  {id:5, en:"opportunity", ru:"возможность", ex:"This job is a great opportunity for me.", cat:"work"},
+  {id:6, en:"responsible", ru:"ответственный", ex:"He is responsible for the marketing team.", cat:"work"},
+  {id:7, en:"experience", ru:"опыт", ex:"She has five years of experience in sales.", cat:"work"},
+  {id:8, en:"schedule", ru:"расписание", ex:"Can you check my schedule for tomorrow?", cat:"work"},
+  {id:9, en:"meeting", ru:"встреча / совещание", ex:"The meeting starts at 10 am.", cat:"work"},
+  {id:10, en:"skill", ru:"навык", ex:"Communication is an important skill.", cat:"general"},
+  {id:11, en:"salary", ru:"зарплата", ex:"The salary depends on your experience.", cat:"work"},
+  {id:12, en:"promote", ru:"повышать в должности", ex:"They promoted him to manager.", cat:"work"},
+  {id:13, en:"negotiate", ru:"вести переговоры", ex:"We need to negotiate a better price.", cat:"work"},
+  {id:14, en:"client", ru:"клиент", ex:"The client was happy with our work.", cat:"work"},
+  {id:15, en:"task", ru:"задача", ex:"Please finish this task by noon.", cat:"work"},
+  {id:16, en:"remote", ru:"удалённый", ex:"I work remote three days a week.", cat:"work"},
+  {id:17, en:"resume", ru:"резюме", ex:"Send me your resume, please.", cat:"work"},
+  {id:18, en:"interview", ru:"собеседование", ex:"The interview went really well.", cat:"work"},
+  {id:19, en:"teamwork", ru:"командная работа", ex:"Teamwork is important in our company.", cat:"work"},
+  {id:20, en:"leadership", ru:"лидерство", ex:"She has strong leadership qualities.", cat:"work"},
+  {id:21, en:"budget", ru:"бюджет", ex:"We stayed within the budget.", cat:"work"},
+  {id:22, en:"contract", ru:"контракт", ex:"They signed the contract yesterday.", cat:"work"},
+  {id:23, en:"flexible", ru:"гибкий", ex:"My working hours are flexible.", cat:"general"},
+  {id:24, en:"journey", ru:"путешествие", ex:"Our journey to Rome was amazing.", cat:"travel"},
+  {id:25, en:"luggage", ru:"багаж", ex:"I lost my luggage at the airport.", cat:"travel"},
+  {id:26, en:"reservation", ru:"бронирование", ex:"I made a reservation for two.", cat:"travel"},
+  {id:27, en:"cancel", ru:"отменять", ex:"We had to cancel the flight.", cat:"travel"},
+  {id:28, en:"confident", ru:"уверенный", ex:"She feels confident about the interview.", cat:"general"},
+  {id:29, en:"explain", ru:"объяснять", ex:"Can you explain this word to me?", cat:"general"},
+  {id:30, en:"decision", ru:"решение", ex:"It was a difficult decision to make.", cat:"general"},
+];
+
+const STORAGE_KEY = "vocab-deck-progress";
+let progress = {};        // { id: 'learning' | 'known' }
+let mode = "main";        // 'main' | 'review'
+let queue = [];
+let qIndex = 0;
+let flipped = false;
+
+const app = document.getElementById("app");
+const counterEl = document.getElementById("counter");
+const progressFillEl = document.getElementById("progressFill");
+
+async function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    progress = raw ? JSON.parse(raw) : {};
+  }catch(e){
+    progress = {};
+  }
+}
+async function saveProgress(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  }catch(e){ /* ignore, state stays in memory for this session */ }
+}
+
+function buildMainQueue(){
+  return WORDS.filter(w => !progress[w.id]).map(w => w.id);
+}
+function buildReviewQueue(){
+  return WORDS.filter(w => progress[w.id] === "learning").map(w => w.id);
+}
+
+function counts(){
+  let learning = 0, known = 0;
+  for(const id in progress){
+    if(progress[id] === "learning") learning++;
+    else if(progress[id] === "known") known++;
+  }
+  return {learning, known};
+}
+
+function updateHeader(){
+  const {learning, known} = counts();
+  const total = WORDS.length;
+  const done = learning + known;
+  counterEl.textContent = `${done}/${total} пройдено · 📥 учить: ${learning} · ✅ знаю: ${known}`;
+  progressFillEl.style.width = (done/total*100) + "%";
+}
+
+function currentWord(){
+  return WORDS.find(w => w.id === queue[qIndex]);
+}
+
+function render(){
+  updateHeader();
+
+  if(qIndex >= queue.length){
+    renderEndScreen();
+    return;
+  }
+
+  const w = currentWord();
+  const {learning} = counts();
+
+  app.innerHTML = `
+    <div class="stage">
+      <div class="ghost g2"></div>
+      <div class="ghost g1"></div>
+      <div class="card" id="card" tabindex="0" role="button" aria-label="Перевернуть карточку">
+        <div class="card-inner">
+          <div class="face front">
+            <div class="hole h1"></div>
+            <div class="hole h2"></div>
+            <span class="tag ${w.cat}">${w.cat === 'work' ? 'работа' : w.cat === 'travel' ? 'путешествия' : 'общее'}</span>
+            <div class="front-word">${w.en}</div>
+            <div class="front-hint">нажмите, чтобы увидеть перевод</div>
+            <div class="idx">№ ${String(w.id).padStart(2,'0')} / ${WORDS.length}</div>
+          </div>
+          <div class="face back">
+            <div class="hole h1"></div>
+            <div class="hole h2"></div>
+            <div class="back-ru">${w.ru}</div>
+            <div class="back-example">${w.ex}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="sort-btn learn" id="learnBtn">📥 Отложить учить</button>
+      <button class="sort-btn know" id="knowBtn">✅ Знаю</button>
+    </div>
+    <div class="hint-text">${mode === 'review' ? 'Режим повтора: карточки из корзины «учить»' : 'Карточка не перелистнётся сама — решайте сами, что вы уже знаете'}</div>
+    <div class="piles">
+      <div class="pile"><div class="pile-stack learn"></div>учить: ${learning}</div>
+      <div class="pile"><div class="pile-stack know"></div>знаю: ${counts().known}</div>
+    </div>
+  `;
+
+  flipped = false;
+  const cardEl = document.getElementById("card");
+  cardEl.addEventListener("click", toggleFlip);
+  cardEl.addEventListener("keydown", (e) => {
+    if(e.key === "Enter" || e.key === " "){ e.preventDefault(); toggleFlip(); }
+  });
+  document.getElementById("learnBtn").addEventListener("click", (e) => { e.stopPropagation(); sort("left"); });
+  document.getElementById("knowBtn").addEventListener("click", (e) => { e.stopPropagation(); sort("right"); });
+}
+
+function toggleFlip(){
+  flipped = !flipped;
+  document.getElementById("card").classList.toggle("flipped", flipped);
+}
+
+async function sort(direction){
+  const w = currentWord();
+  const cardEl = document.getElementById("card");
+  cardEl.classList.add(direction === "left" ? "sort-left" : "sort-right");
+
+  progress[w.id] = direction === "left" ? "learning" : "known";
+  updateHeader();
+  saveProgress();
+
+  await new Promise(r => setTimeout(r, 380));
+  qIndex++;
+  render();
+}
+
+function renderEndScreen(){
+  const {learning, known} = counts();
+  const reviewAvailable = learning > 0;
+  app.innerHTML = `
+    <div class="end-screen">
+      <h2>${mode === 'review' ? 'Повтор завершён' : 'Колода разобрана!'}</h2>
+      <p>Знаете: ${known} · В корзине «учить»: ${learning}${mode === 'main' ? '. Новые слова появятся, когда вы добавите их в колоду.' : ''}</p>
+      <div class="end-actions">
+        ${reviewAvailable ? `<button class="end-btn primary" id="reviewBtn">🔁 Повторить корзину (${learning})</button>` : ''}
+        <button class="end-btn secondary" id="restartBtn">Сбросить и начать заново</button>
+      </div>
+    </div>
+  `;
+  if(reviewAvailable){
+    document.getElementById("reviewBtn").addEventListener("click", startReview);
+  }
+  document.getElementById("restartBtn").addEventListener("click", resetAll);
+}
+
+function startReview(){
+  mode = "review";
+  queue = buildReviewQueue();
+  qIndex = 0;
+  render();
+}
+
+async function resetAll(){
+  if(!confirm("Сбросить весь прогресс и начать колоду заново?")) return;
+  progress = {};
+  await saveProgress();
+  mode = "main";
+  queue = buildMainQueue();
+  qIndex = 0;
+  render();
+}
+
+document.getElementById("resetBtn").addEventListener("click", resetAll);
+
+(async function init(){
+  await loadProgress();
+  queue = buildMainQueue();
+  qIndex = 0;
+  if(queue.length === 0 && buildReviewQueue().length === 0 && Object.keys(progress).length === WORDS.length){
+    // everything already known
+  }
+  render();
+})();
+</script>
+</body>
+</html>
