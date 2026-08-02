@@ -3,7 +3,7 @@
 План развития Vocab Deck на ближайшие ~11 недель. Порядок фаз выбран так, чтобы каждая следующая функция опиралась на предыдущую: сначала обогащаем данные о словах (транскрипция + аудио), потом строим на этой базе обратный режим и диктант, а системы вроде интервальных повторений добавляем уже поверх готового фундамента.
 
 ```mermaid
-%%{init: {'gantt': {'rightPadding': 220, 'leftPadding': 90, 'fontSize': 12, 'barHeight': 24, 'topPadding': 50, 'sectionFontSize': 13, 'numberSectionStyles': 3}}}%%
+%%{init: {'gantt': {'rightPadding': 220, 'leftPadding': 90, 'fontSize': 10, 'barHeight': 24, 'topPadding': 50, 'sectionFontSize': 13, 'numberSectionStyles': 3}}}%%
 gantt
     title Vocab Deck — дорожная карта
     dateFormat  YYYY-MM-DD
