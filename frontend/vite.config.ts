@@ -7,7 +7,8 @@ import { defineConfig, loadEnv } from 'vite';
 // В разработке запросы /api проксируются на FastAPI: страница и API на одном origin,
 // поэтому cookie session_id (SameSite=Lax, Path=/api) работает без настройки CORS.
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '');
+  // Каталог проекта, а не текущий: dev-сервер может запускаться из корня репозитория
+  const env = loadEnv(mode, fileURLToPath(new URL('.', import.meta.url)), '');
   return {
     base: env.VITE_BASE ?? '/',
     plugins: [react()],
