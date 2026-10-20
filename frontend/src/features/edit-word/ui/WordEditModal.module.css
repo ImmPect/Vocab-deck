@@ -1,0 +1,15 @@
+.meta { display: flex; gap: 12px; align-items: center; margin: -4px 0 14px; font-size: 13px; color: var(--ink-soft); }
+.alert {
+  margin: 0 0 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(168, 56, 47, 0.1);
+  color: var(--red);
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+.archive { margin-right: auto; color: var(--red); }
+.confirm { flex: 1 1 100%; font-size: 13.5px; color: var(--ink); margin-bottom: 4px; }
+@media (max-width: 767.98px) {
+  .archive { order: 9; }
+}

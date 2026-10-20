@@ -1,0 +1,62 @@
+@import './tokens.css';
+@import './fonts.css';
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: radial-gradient(1200px 700px at 70% -10%, var(--desk-3), transparent 70%),
+    linear-gradient(160deg, var(--desk), var(--desk-2)) fixed;
+  background-color: var(--page-bg);
+  color: var(--on-desk);
+  font-family: var(--font-main);
+  font-size: 15px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+img, svg, video { max-width: 100%; height: auto; }
+a { color: inherit; }
+h1, h2, h3 { text-wrap: balance; }
+
+/* Видимый фокус контрастного цвета на всех интерактивных элементах (раздел 4.9) */
+:focus-visible { outline: 2px solid var(--amber-light); outline-offset: 2px; }
+[tabindex='-1']:focus { outline: none; }
+
+/* Текст только для экранного диктора */
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Лист в линейку для карточек слов */
+.paper-lines {
+  background: repeating-linear-gradient(to bottom, transparent 0 35px, var(--line) 35px 36px), var(--paper);
+}
+
+/* Ссылка «Перейти к содержимому» */
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 100;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 600;
+}
+.skip-link:focus { top: 12px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; }
+}

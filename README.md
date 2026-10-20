@@ -22,6 +22,10 @@
 
 REST API на FastAPI + SQLAlchemy + Alembic (PostgreSQL / SQLite) — в папке [backend](backend/README.md): 31 эндпоинт, 128 автотестов, документация Swagger UI по адресу `/docs`.
 
+## Клиентская часть
+
+SPA на React + TypeScript + Vite, Redux Toolkit (паттерн Flux) и RTK Query, структура Feature-Sliced Design — в папке [frontend](frontend/README.md): 11 экранов, гостевой режим с переносом прогресса, офлайн-очередь ответов, адаптивная вёрстка от 360 px.
+
 ## Стек
 
 Чистый HTML / CSS / JavaScript, без фреймворков и зависимостей — один файл `index.html`, который можно открыть где угодно.

@@ -1,0 +1,15 @@
+.grid { display: grid; gap: 22px; }
+.col { display: flex; flex-direction: column; gap: 22px; min-width: 0; padding-top: 8px; }
+@media (min-width: 1024px) {
+  .grid { grid-template-columns: minmax(300px, 380px) 1fr; align-items: start; }
+}
+.panel { padding: 18px 20px; }
+.h { margin: 0 0 12px; font-size: 15px; }
+.row2 { display: grid; gap: 0 12px; }
+@media (min-width: 768px) {
+  .row2 { grid-template-columns: 1fr 1fr; }
+}
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.danger { color: var(--red); margin-left: auto; }
+.err { color: var(--red); font-size: 13px; margin: 0 0 10px; }
+.text { margin: 0 0 14px; line-height: 1.5; }

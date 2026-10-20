@@ -1,0 +1,14 @@
+.say {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 99px;
+  border: 1px solid var(--paper-border);
+  background: none;
+  color: var(--ink);
+}
+.say:hover:not(:disabled) { background: rgba(0, 0, 0, 0.05); }
+.say:disabled { opacity: 0.4; cursor: not-allowed; }
+.onDesk { border-color: rgba(240, 233, 219, 0.3); color: var(--on-desk); }
+.onDesk:hover:not(:disabled) { background: rgba(240, 233, 219, 0.08); }

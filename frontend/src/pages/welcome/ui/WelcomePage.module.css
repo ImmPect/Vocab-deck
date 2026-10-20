@@ -1,0 +1,18 @@
+.welcome {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 16px;
+}
+.stack { position: relative; width: 250px; height: 170px; margin: 0 auto 36px; }
+.card { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.card:nth-child(1) { transform: rotate(-7deg) translate(-14px, 8px); opacity: 0.55; }
+.card:nth-child(2) { transform: rotate(5deg) translate(12px, 4px); opacity: 0.75; }
+.word { font-size: 34px; font-weight: 700; letter-spacing: -0.01em; }
+.ru { font-family: var(--font-hand); font-size: 26px; color: var(--ink-blue); margin-top: -4px; }
+.h { font-family: var(--font-hand); font-size: 56px; margin: 0 0 8px; line-height: 1; }
+.p { max-width: 400px; margin: 0 auto 26px; color: var(--on-desk-soft); line-height: 1.55; }
+.actions { display: flex; flex-direction: column; gap: 10px; width: min(320px, 100%); }
