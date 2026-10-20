@@ -38,8 +38,13 @@ class Settings(BaseSettings):
 
     # Раунд мини-игры
     round_time_limit_s: int = 60
-    round_grace_s: int = 10
+    round_grace_s: int = 5  # допуск на задержку сети (п. 3.7.5 ПР3)
     round_questions: int = 5
+
+    def check_production(self) -> None:
+        """В производственной среде запрещены отладочные значения секретов (лекция 4)."""
+        if self.env == "prod" and (self.secret_key == "dev-secret-change-me" or len(self.secret_key) < 32):
+            raise RuntimeError("ENV=prod: задайте SECRET_KEY длиной не менее 32 символов")
 
     @property
     def is_sqlite(self) -> bool:

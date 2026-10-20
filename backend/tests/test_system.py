@@ -30,3 +30,17 @@ def test_unknown_route_uses_error_format(client):
 
 def test_request_id_header(client):
     assert client.get("/api/v1/health").headers["X-Request-Id"]
+
+
+def test_swagger_adds_csrf_header(client):
+    r = client.get("/docs")
+    assert r.status_code == 200
+    assert "X-Requested-With" in r.text and "requestInterceptor" in r.text
+
+
+def test_prod_requires_strong_secret():
+    import pytest
+    from app.core.config import Settings
+    with pytest.raises(RuntimeError):
+        Settings(env="prod", secret_key="dev-secret-change-me").check_production()
+    Settings(env="prod", secret_key="x" * 40).check_production()
