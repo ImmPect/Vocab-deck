@@ -1,0 +1,30 @@
+# Локальный запуск с PostgreSQL:  docker compose up --build
+# API: http://localhost:8000/docs
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: vocab
+      POSTGRES_PASSWORD: vocab
+      POSTGRES_DB: vocabdeck
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vocab -d vocabdeck"]
+      interval: 2s
+      retries: 20
+
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://vocab:vocab@db:5432/vocabdeck
+      SECRET_KEY: local-docker-secret
+      CORS_ORIGIN: http://localhost:5173
+      ADMIN_EMAIL: admin@vocabdeck.local
+      ADMIN_PASSWORD: VocabAdmin2026
+    ports: ["8000:8000"]
+    depends_on:
+      db: {condition: service_healthy}
+
+volumes:
+  pgdata:

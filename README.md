@@ -18,6 +18,10 @@
 
 Архитектурный проект целевой версии (сервер на FastAPI, PostgreSQL, React-клиент, REST API, диаграммы C4, ER и UML) — в папке [docs/architecture](docs/architecture/README.md).
 
+## Серверная часть
+
+REST API на FastAPI + SQLAlchemy + Alembic (PostgreSQL / SQLite) — в папке [backend](backend/README.md): 31 эндпоинт, 128 автотестов, документация Swagger UI по адресу `/docs`.
+
 ## Стек
 
 Чистый HTML / CSS / JavaScript, без фреймворков и зависимостей — один файл `index.html`, который можно открыть где угодно.
