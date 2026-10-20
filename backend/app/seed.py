@@ -108,8 +108,10 @@ def seed(db: Session) -> dict:
 
 
 if __name__ == "__main__":
-    from dotenv import load_dotenv  # type: ignore[import-not-found]
+    from dotenv import load_dotenv  # устанавливается вместе с pydantic-settings
 
-    load_dotenv()
+    from app.core.config import BASE_DIR
+
+    load_dotenv(BASE_DIR / ".env")
     with SessionLocal() as session:
         print("Добавлено:", seed(session))

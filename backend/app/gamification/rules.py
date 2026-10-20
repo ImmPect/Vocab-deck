@@ -166,9 +166,10 @@ def update_streak(state: StreakState, today: date) -> StreakState:
     """
     last = state.last_active_date
     streak, freezes = state.streak_days, state.streak_freezes
-    if last == today:
+    if last is not None and last >= today:
+        # Тот же день или запоздавший ответ за прошедший день (пакет из offline) — серия не меняется
         return state
-    if last is None or last > today:
+    if last is None:
         streak = 1
     else:
         missed = (today - last).days - 1

@@ -72,7 +72,7 @@ def learned_in_deck(db: Session, user_id: int, deck_id: int) -> int:
 
 
 def answers_by_day(db: Session, user_id: int, date_from: date, date_to: date, tz_name: str) -> list[dict]:
-    """Ответы по дням в часовом поясе пользователя (GET /me/stats).
+    """Проверяемые ответы (мини-игры) по дням в часовом поясе пользователя (GET /me/stats).
 
     Группировка выполняется в Python, чтобы одинаково работать в PostgreSQL и SQLite.
     """
@@ -81,7 +81,8 @@ def answers_by_day(db: Session, user_id: int, date_from: date, date_to: date, tz
     end = datetime.combine(date_to + timedelta(days=1), datetime.min.time(), tz)
     rows = db.execute(
         select(AnswerEvent.created_at, AnswerEvent.is_correct, AnswerEvent.xp_awarded)
-        .where(AnswerEvent.user_id == user_id, AnswerEvent.created_at >= start, AnswerEvent.created_at < end)
+        .where(AnswerEvent.user_id == user_id, AnswerEvent.created_at >= start, AnswerEvent.created_at < end,
+               AnswerEvent.mode.in_(("deadline", "dictation")))  # только проверяемые ответы
     ).all()
     days: dict[date, dict] = defaultdict(lambda: {"answers": 0, "correct": 0, "xp": 0})
     for created_at, is_correct, xp in rows:

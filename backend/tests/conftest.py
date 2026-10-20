@@ -31,11 +31,17 @@ PASSWORD = "Secret123"
 
 @pytest.fixture
 def engine():
-    eng = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
+    # TEST_DATABASE_URL задаётся в CI, чтобы прогнать те же тесты на PostgreSQL
+    url = os.getenv("TEST_DATABASE_URL")
+    if url:
+        eng = create_engine(url)
+        Base.metadata.drop_all(eng)
+    else:
+        eng = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
 
-    @event.listens_for(eng, "connect")
-    def _fk_on(dbapi_conn, _):
-        dbapi_conn.execute("PRAGMA foreign_keys=ON")
+        @event.listens_for(eng, "connect")
+        def _fk_on(dbapi_conn, _):
+            dbapi_conn.execute("PRAGMA foreign_keys=ON")
 
     Base.metadata.create_all(eng)
     yield eng
