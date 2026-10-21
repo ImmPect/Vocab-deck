@@ -1,0 +1,100 @@
+/* Mobile-first: базовые стили — телефон (< 768 px), затем расширение для планшета и компьютера.
+   Брейкпоинты из раздела 4.9 ПР3: 768 px — боковое меню, 1024 px — двухколоночные экраны. */
+.shell { min-height: 100dvh; display: flex; flex-direction: column; }
+
+.brand { font-family: var(--font-hand); font-weight: 700; font-size: 30px; line-height: 1; color: var(--paper); }
+
+/* ---------- телефон ---------- */
+.side { display: none; }
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 8px;
+  background: linear-gradient(var(--desk-2), rgba(32, 22, 14, 0.92));
+  backdrop-filter: blur(6px);
+}
+.streak { font-weight: 700; font-size: 15px; }
+.main { flex: 1; padding: 16px 16px 96px; outline: none; }
+.content { max-width: var(--content-max); margin: 0 auto; }
+
+.tabs {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  border-top: 1px solid rgba(240, 233, 219, 0.1);
+  background: #1f160d;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.tab {
+  position: relative;
+  flex: 1;
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--on-desk-muted);
+  font-size: 11px;
+  text-decoration: none;
+}
+.tab .ico { font-size: 19px; }
+.tab:global(.active) { color: var(--on-desk); font-weight: 600; }
+.tab .badge { position: absolute; top: 4px; left: calc(50% + 6px); }
+
+.badge {
+  margin-left: auto;
+  background: var(--amber);
+  color: #1d140a;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 7px;
+  line-height: 1.5;
+}
+
+/* ---------- планшет и компьютер ---------- */
+@media (min-width: 768px) {
+  .shell { display: grid; grid-template-columns: var(--side-w) 1fr; }
+  .topbar, .tabs { display: none; }
+  .side {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 28px 18px;
+    border-right: 1px solid rgba(240, 233, 219, 0.08);
+    background: rgba(0, 0, 0, 0.14);
+  }
+  .side .brand { font-size: 34px; margin: 0 0 22px 6px; }
+  .navBtn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: var(--on-desk-soft);
+    font-size: 14px;
+    text-decoration: none;
+  }
+  .navBtn:hover { background: rgba(240, 233, 219, 0.06); color: var(--on-desk); }
+  .navBtn:global(.active) { background: rgba(240, 233, 219, 0.1); color: var(--on-desk); font-weight: 600; }
+  .ico { width: 22px; text-align: center; }
+  .foot { margin-top: auto; font-size: 12px; color: var(--on-desk-muted); line-height: 1.5; display: flex; flex-direction: column; gap: 8px; }
+  .foot p { margin: 0; overflow-wrap: anywhere; }
+  .main { padding: 32px 32px 48px; }
+}
+@media (min-width: 1024px) {
+  .main { padding: 36px 48px 56px; }
+}

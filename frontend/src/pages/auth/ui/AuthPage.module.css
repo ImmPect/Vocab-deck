@@ -1,0 +1,17 @@
+.auth { min-height: 100dvh; display: grid; place-items: center; padding: 24px 16px; }
+.card { width: min(440px, 100%); padding: 28px 26px 22px; }
+.card h1 { color: var(--ink); }
+.card header p { color: var(--ink-soft); }
+.tabs { display: flex; gap: 4px; padding: 4px; border-radius: 10px; background: var(--paper-2); margin: -6px 0 18px; }
+.tabs a {
+  flex: 1;
+  text-align: center;
+  padding: 9px 8px;
+  border-radius: 8px;
+  color: var(--ink-soft);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+}
+.tabs a.on { background: var(--paper); color: var(--ink); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); }
+.back { display: inline-block; margin-top: 14px; font-size: 13px; color: var(--ink-blue); padding: 6px 0; }

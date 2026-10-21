@@ -1,0 +1,11 @@
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.tools > select { width: auto; flex: 0 1 200px; }
+.search { flex: 1 1 220px; }
+@media (max-width: 767.98px) {
+  .tools > select { flex: 1 1 140px; }
+}

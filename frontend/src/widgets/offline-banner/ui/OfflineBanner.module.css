@@ -1,0 +1,11 @@
+.banner {
+  margin: 0 0 18px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  line-height: 1.4;
+  background: rgba(240, 233, 219, 0.08);
+  border: 1px solid rgba(240, 233, 219, 0.16);
+  color: var(--on-desk);
+}
+.offline { background: rgba(201, 138, 59, 0.18); border-color: rgba(201, 138, 59, 0.45); }

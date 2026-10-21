@@ -1,0 +1,11 @@
+.done { max-width: 420px; margin: 0 auto; padding: 26px 24px; text-align: center; }
+.h { font-family: var(--font-hand); font-size: 40px; margin: 0; line-height: 1; }
+.actions { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.again {
+  min-height: 44px;
+  border: 1px solid var(--paper-border);
+  border-radius: var(--r-ctl);
+  background: none;
+  color: var(--ink);
+  font-weight: 600;
+}

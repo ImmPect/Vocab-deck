@@ -1,0 +1,10 @@
+.panel { padding: 18px 20px; }
+.h { margin: 0 0 12px; font-size: 15px; }
+.ladder { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.rung { padding: 9px 14px; border-radius: 9px; font-size: 14px; background: var(--paper-2); color: var(--ink-soft); }
+.main { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.title { font-weight: 600; }
+.done { color: var(--ink); }
+.now { background: var(--ink-blue); color: var(--paper); }
+.pts { font-size: 12px; white-space: nowrap; }
+.unlocks { font-size: 12px; margin-top: 3px; opacity: 0.85; }
