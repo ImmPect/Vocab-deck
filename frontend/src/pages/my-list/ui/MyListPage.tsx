@@ -82,7 +82,7 @@ export default function MyListPage() {
                     {w.example && <span className={s.ex} lang="en">{w.example}</span>}
                   </div>
                   <div className={s.acts}>
-                    <SpeakButton text={w.en} />
+                    <SpeakButton text={w.en} wordId={w.id} />
                     <Button variant="link" size="small" onClick={() => setDialog({ kind: 'edit', word: w })} aria-label={`Изменить «${w.en}»`}>Изменить</Button>
                     <Button variant="link" size="small" className={s.del} onClick={() => setDialog({ kind: 'delete', word: w })} aria-label={`Удалить «${w.en}»`}>Удалить</Button>
                   </div>

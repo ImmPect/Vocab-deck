@@ -6,11 +6,11 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectGuestBoxes } from '@/features/guest-progress-sync';
 import { AnswerOptions, abandonRound, selectCurrentQuestion, selectGame, startRound, submitAnswer } from '@/features/play-deadline';
-import { SpeakButton } from '@/features/speak-word';
+import { SpeakButton, preloadAudio } from '@/features/speak-word';
 import { selectIsGuest } from '@/entities/user';
 import { ROUTES } from '@/shared/config';
 import { useDelayedFlag } from '@/shared/lib';
-import { useAppDispatch, useAppSelector } from '@/shared/model';
+import { selectAccent, useAppDispatch, useAppSelector } from '@/shared/model';
 import { Button, ButtonLink, EmptyState, PageHeader, Paper, Skeleton } from '@/shared/ui';
 import { RoundTimer } from '@/widgets/round-timer';
 import s from './DeadlinePage.module.css';
@@ -36,6 +36,11 @@ export default function DeadlinePage() {
       dispatch(abandonRound());
     };
   }, [deckId, dispatch]);
+
+  const accent = useAppSelector(selectAccent);
+  useEffect(() => {
+    if (q) preloadAudio(q.word_id, 'word', accent);
+  }, [q, accent]);
 
   useEffect(() => {
     if (g.status === 'finished' && g.roundId) navigate(ROUTES.result(g.roundId), { replace: true });
@@ -96,7 +101,7 @@ export default function DeadlinePage() {
             </span>
             <span className={s.ipa}>
               {q.ipa}
-              <SpeakButton text={q.prompt} />
+              <SpeakButton text={q.prompt} wordId={q.word_id} />
             </span>
           </Paper>
           <AnswerOptions onPick={pick} />

@@ -10,6 +10,7 @@ import { ActivityChart } from '@/widgets/activity-chart';
 import { CareerLadder } from '@/widgets/career-ladder';
 import { EmployeeBadge } from '@/widgets/employee-badge';
 import { AccountSettings } from './AccountSettings';
+import { SpeechSettings } from './SpeechSettings';
 import s from './ProfilePage.module.css';
 
 export default function ProfilePage() {
@@ -20,6 +21,7 @@ export default function ProfilePage() {
       <div className={s.grid}>
         <div className={s.col}>
           <EmployeeBadge />
+          <SpeechSettings />
           <CareerLadder />
         </div>
         <div className={s.col}>

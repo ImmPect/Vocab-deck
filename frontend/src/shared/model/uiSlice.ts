@@ -13,8 +13,12 @@ export interface Toast {
   kind: ToastKind;
 }
 
+/** Произношение озвучки: британское (как транскрипции в словаре) или американское. */
+export type Accent = 'uk' | 'us';
+
 export interface UiState {
   toasts: Toast[];
+  accent: Accent;
   online: boolean;
   registerPromptShown: boolean;
   onboardingStep: number;
@@ -25,6 +29,7 @@ export const ONBOARDING_STEPS = 3;
 
 const initialState: UiState = {
   toasts: [],
+  accent: 'uk',
   online: typeof navigator === 'undefined' ? true : navigator.onLine,
   registerPromptShown: false,
   onboardingStep: 0,
@@ -64,6 +69,9 @@ export const uiSlice = createSlice({
     onboardingRestored(state, action: PayloadAction<boolean>) {
       state.onboardingDone = action.payload;
     },
+    accentChanged(state, action: PayloadAction<Accent>) {
+      state.accent = action.payload;
+    },
   },
 });
 
@@ -73,4 +81,5 @@ type WithUi = { ui: UiState };
 export const selectToast = (s: WithUi): Toast | undefined => s.ui.toasts[0];
 export const selectOnline = (s: WithUi) => s.ui.online;
 export const selectRegisterPromptShown = (s: WithUi) => s.ui.registerPromptShown;
+export const selectAccent = (s: WithUi) => s.ui.accent;
 export const selectOnboarding = (s: WithUi) => ({ step: s.ui.onboardingStep, done: s.ui.onboardingDone });

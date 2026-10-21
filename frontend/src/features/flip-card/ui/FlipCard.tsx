@@ -18,11 +18,14 @@ export interface FlipCardWord {
 export function FlipCard({
   word,
   speakSlot,
+  exampleSlot,
   onFlip,
 }: {
   word: FlipCardWord;
   /** Кнопка озвучки (фича speak-word) — вставляет страница. */
   speakSlot?: ReactNode;
+  /** Кнопка озвучки примера на обороте. */
+  exampleSlot?: ReactNode;
   onFlip?: (flipped: boolean) => void;
 }) {
   const [flipped, setFlipped] = useState(false);
@@ -67,8 +70,16 @@ export function FlipCard({
         <div className={`${s.face} ${s.back} paper-lines`} aria-hidden={!flipped}>
           <span className={s.ru}>{word.ru}</span>
           {word.example && (
-            <span className={s.ex} lang="en">
-              {word.example}
+            <span className={s.exRow}>
+              <span className={s.ex} lang="en">
+                {word.example}
+              </span>
+              {/* кнопка только на открытом обороте — иначе фокус попадал бы на невидимую сторону */}
+              {exampleSlot && flipped && (
+                <span onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+                  {exampleSlot}
+                </span>
+              )}
             </span>
           )}
         </div>

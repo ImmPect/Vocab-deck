@@ -10,7 +10,8 @@ SPA на React 18 + TypeScript, сборщик Vite. Реализует архи
 | Маршрутизация | React Router 6, ленивые страницы, охранники `RequireAuth`, `RequireAdmin`, `GuestOnly` |
 | Структура кода | Feature-Sliced Design: `app → pages → widgets → features → entities → shared` |
 | Стили | CSS Modules + CSS-переменные (токены дизайн-системы ЛР2), mobile-first |
-| Тесты | Vitest: reducers, проекция журнала гостя, хранилище и миграции формата |
+| Озвучка | MP3 нейросетевого голоса с сервера (`GET /words/{id}/audio`), без сети — английский голос браузера; британское или американское произношение выбирается в профиле |
+| Тесты | Vitest: reducers, проекция журнала гостя, хранилище и миграции формата, выбор голоса |
 
 ## Запуск
 

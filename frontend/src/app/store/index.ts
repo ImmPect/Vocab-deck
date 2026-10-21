@@ -24,11 +24,11 @@ const rootReducer = combineReducers({
   outbox: outboxSlice.reducer,
 });
 
-function readPrefs(): boolean {
+function readPrefs(): { onboarding_done?: boolean; accent?: string } {
   try {
-    return JSON.parse(storage.get(STORAGE_KEYS.prefs) ?? '{}').onboarding_done === true;
+    return JSON.parse(storage.get(STORAGE_KEYS.prefs) ?? '{}');
   } catch {
-    return false;
+    return {};
   }
 }
 
@@ -43,7 +43,9 @@ export function makeStore() {
     devTools: import.meta.env.DEV, // Redux DevTools только в режиме разработки
   });
   setupListeners(store.dispatch); // refetchOnFocus / refetchOnReconnect
-  if (readPrefs()) store.dispatch(ui.onboardingRestored(true));
+  const prefs = readPrefs();
+  if (prefs.onboarding_done) store.dispatch(ui.onboardingRestored(true));
+  if (prefs.accent === 'uk' || prefs.accent === 'us') store.dispatch(ui.accentChanged(prefs.accent));
   return store;
 }
 

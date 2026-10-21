@@ -7,7 +7,7 @@
  *   outbox/itemsAcked (+receipt)   → guestProgress/eventRecorded
  *   изменения журнала и очереди    → запись в localStorage (с задержкой до 500 мс)
  *   api/sessionExpired             → сброс кэша API
- *   ui/onboarding*                 → vocabdeck:prefs
+ *   ui/onboarding*, ui/accentChanged → vocabdeck:prefs
  */
 import { createListenerMiddleware, isAnyOf, type TypedStartListening } from '@reduxjs/toolkit';
 import { guestProgress, saveGuestProgress, type GuestEvent } from '@/features/guest-progress-sync';
@@ -103,10 +103,11 @@ startListening({
   },
 });
 
-// Подсказки онбординга пройдены или пропущены
+// Настройки устройства: подсказки онбординга пройдены, выбранное произношение озвучки
 startListening({
-  matcher: isAnyOf(ui.onboardingSkipped, ui.onboardingStepChanged),
+  matcher: isAnyOf(ui.onboardingSkipped, ui.onboardingStepChanged, ui.accentChanged),
   effect: (_action, api) => {
-    if (api.getState().ui.onboardingDone) storage.set(STORAGE_KEYS.prefs, JSON.stringify({ format_version: 1, onboarding_done: true }));
+    const { onboardingDone, accent } = api.getState().ui;
+    storage.set(STORAGE_KEYS.prefs, JSON.stringify({ format_version: 1, onboarding_done: onboardingDone, accent }));
   },
 });

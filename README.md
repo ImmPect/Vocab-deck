@@ -20,7 +20,7 @@
 
 ## Серверная часть
 
-REST API на FastAPI + SQLAlchemy + Alembic (PostgreSQL / SQLite) — в папке [backend](backend/README.md): 31 эндпоинт, 128 автотестов, документация Swagger UI по адресу `/docs`.
+REST API на FastAPI + SQLAlchemy + Alembic (PostgreSQL / SQLite) — в папке [backend](backend/README.md): 32 эндпоинта, 134 автотеста, 175 слов в 7 отделах, документация Swagger UI по адресу `/docs`.
 
 ## Клиентская часть
 

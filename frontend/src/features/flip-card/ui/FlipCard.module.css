@@ -76,3 +76,5 @@
 @media (prefers-reduced-motion: reduce) {
   .inner { transition: none; }
 }
+.exRow { display: flex; align-items: center; gap: 10px; }
+.exRow > span:last-child { flex: none; }
