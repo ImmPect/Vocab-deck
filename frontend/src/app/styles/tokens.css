@@ -1,0 +1,41 @@
+/* Токены дизайн-системы ЛР2 (табл. 23–24 ТЗ): «рабочий стол» и «лист бумаги в линейку».
+   Задаются один раз; компоненты берут цвета, радиусы и тени только отсюда. */
+:root {
+  --desk: #2b2015;
+  --desk-2: #20160e;
+  --desk-3: #3a2c1e;
+  --desk-border: #4a3a28;
+  --page-bg: #171009;
+
+  --paper: #f6efdc;
+  --paper-2: #ebe1c6;
+  --paper-border: #bfb193;
+  --paper-input: #fffaf0;
+  --line: rgba(72, 98, 148, 0.22);
+
+  --ink: #241a11;
+  --ink-soft: #5c4d3a;
+  --ink-blue: #1b2a4a;
+
+  --amber: #c98a3b;
+  --amber-deep: #8f5e24;
+  --amber-light: #f3c77e;
+  --sage: #6e8b63;
+  --sage-deep: #46613e;
+  --red: #a8382f;
+  --violet: #6b5d8f;
+
+  --on-desk: #f0e9db;
+  --on-desk-soft: #cfc2a9;
+  --on-desk-muted: #a8977b;
+
+  --r-card: 14px;
+  --r-ctl: 10px;
+  --shadow-card: 0 18px 40px -20px rgba(0, 0, 0, 0.6);
+
+  --font-main: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-hand: 'Caveat', 'Segoe Print', cursive;
+
+  --side-w: 232px;
+  --content-max: 1120px;
+}

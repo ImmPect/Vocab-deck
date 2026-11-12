@@ -26,6 +26,9 @@ class Settings(BaseSettings):
     # Секрет для HMAC-квитанций гостя. В prod обязательно задать длинное случайное значение.
     secret_key: str = "dev-secret-change-me"
 
+    # Кэш сгенерированной озвучки (MP3). В контейнере — смонтированный том, чтобы не терять файлы
+    media_dir: Path = BASE_DIR / "media"
+
     cors_origin: str = "http://localhost:5173"
     session_ttl_days: int = 30
     cookie_secure: bool = False

@@ -6,6 +6,7 @@ from sqlalchemy import select
 from app.decks.models import Deck
 from app.learning.models import UserWordProgress
 from app.words.models import Word
+from app.seed_data import DECKS, WORDS
 
 API = "/api/v1"
 
@@ -32,10 +33,10 @@ def test_guest_sees_shared_decks_without_progress(client):
     r = client.get(f"{API}/decks")
     body = r.json()
     assert r.status_code == 200
-    assert body["meta"]["total_items"] == 4
-    assert [d["title"] for d in body["data"]] == ["Офис", "Переговоры", "Собеседование", "Командировка"]
+    assert body["meta"]["total_items"] == len(DECKS)
+    assert [d["title"] for d in body["data"]] == [t for t, _, _ in sorted(DECKS, key=lambda d: d[2])]
     office = body["data"][0]
-    assert office["kind"] == "shared" and office["words_count"] == 8 and office["progress"] is None
+    assert office["kind"] == "shared" and office["words_count"] == len(WORDS["Офис"]) and office["progress"] is None
     trip = body["data"][3]
     assert trip["locked"] is True and trip["unlock_rule"] == {"min_xp": 800}
     assert trip["unlock_condition"] == "Откроется на должности «Специалист» (800 опыта)"
@@ -46,7 +47,7 @@ def test_locked_deck_depends_on_user_xp(make_user, make_client):
     high = make_client(make_user(xp=900)).get(f"{API}/decks").json()["data"]
     assert low[3]["locked"] is True
     assert high[3]["locked"] is False
-    assert low[0]["progress"] == {"learned": 0, "in_progress": 0, "new": 8}
+    assert low[0]["progress"] == {"learned": 0, "in_progress": 0, "new": len(WORDS["Офис"])}
 
 
 def test_learned_in_deck_rule_and_progress(db, make_user, make_client):
@@ -60,7 +61,7 @@ def test_learned_in_deck_rule_and_progress(db, make_user, make_client):
     db.commit()
     c = make_client(user)
     data = {d["title"]: d for d in c.get(f"{API}/decks").json()["data"]}
-    assert data["Офис"]["progress"] == {"learned": 1, "in_progress": 2, "new": 5}
+    assert data["Офис"]["progress"] == {"learned": 1, "in_progress": 2, "new": len(WORDS["Офис"]) - 3}
     assert data["Переговоры"]["locked"] is True
     assert data["Переговоры"]["unlock_condition"] == "Откроется, когда вы выучите 2 слова в отделе «Офис»"
 
@@ -73,11 +74,11 @@ def test_learned_in_deck_rule_and_progress(db, make_user, make_client):
 def test_kind_filter_and_personal_lists(user_client):
     new_list(user_client, "Слова из отчёта")
     all_decks = user_client.get(f"{API}/decks").json()
-    assert all_decks["meta"]["total_items"] == 5
+    assert all_decks["meta"]["total_items"] == len(DECKS) + 1
     assert all_decks["data"][-1]["kind"] == "personal"
     personal = user_client.get(f"{API}/decks", params={"kind": "personal"}).json()["data"]
     assert [d["title"] for d in personal] == ["Слова из отчёта"]
-    assert len(user_client.get(f"{API}/decks", params={"kind": "shared"}).json()["data"]) == 4
+    assert len(user_client.get(f"{API}/decks", params={"kind": "shared"}).json()["data"]) == len(DECKS)
     r = user_client.get(f"{API}/decks", params={"kind": "other"})
     assert r.status_code == 422 and r.json()["error"]["details"][0]["field"] == "kind"
 

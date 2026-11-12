@@ -7,6 +7,7 @@ from sqlalchemy import select
 from app.decks.models import Deck
 from app.learning.models import UserWordProgress
 from app.words.models import Word
+from app.seed_data import DECKS, WORDS
 
 API = "/api/v1/admin"
 
@@ -43,7 +44,7 @@ def test_search_words(db, admin_client, make_user):
     assert w["deck"] == {"id": deck_id(db), "title": "Переговоры"}
     assert w["learners_count"] == 1 and w["status"] == "published"
     assert w["created_by"]["name"] == "Администратор" and w["created_at"].endswith("Z")
-    assert admin_client.get(f"{API}/words").json()["meta"]["total_items"] == 26
+    assert admin_client.get(f"{API}/words").json()["meta"]["total_items"] == sum(len(w) for w in WORDS.values())
 
 
 def test_search_words_excludes_personal_and_validates(admin_client, user_client):
@@ -58,20 +59,20 @@ def test_search_words_excludes_personal_and_validates(admin_client, user_client)
 # ---------- POST /admin/words ----------
 
 def test_create_word_draft_and_duplicate(db, admin_client, client):
-    body = {"deck_id": deck_id(db), "en": "counteroffer", "ru": "встречное предложение",
-            "ipa": "/ˈkaʊntərˌɒfə/"}
+    body = {"deck_id": deck_id(db), "en": "escalate", "ru": "обострять",
+            "ipa": "/ˈeskəleɪt/"}
     r = admin_client.post(f"{API}/words", json=body)
     data = r.json()["data"]
     assert r.status_code == 201 and data["status"] == "draft" and data["updated_by"]["name"] == "Администратор"
     # Черновик не виден пользователям
-    words = client.get(f"/api/v1/decks/{deck_id(db)}/words", params={"q": "counter"}).json()["data"]
+    words = client.get(f"/api/v1/decks/{deck_id(db)}/words", params={"q": "escal"}).json()["data"]
     assert words == []
 
-    r = admin_client.post(f"{API}/words", json={**body, "en": "COUNTEROFFER"})
+    r = admin_client.post(f"{API}/words", json={**body, "en": "ESCALATE"})
     err = r.json()["error"]
     assert r.status_code == 409 and err["code"] == "word_duplicate"
     assert err["details"][0]["existing_word_id"] == data["id"]
-    assert err["message"] == "Слово «COUNTEROFFER» уже есть в отделе «Переговоры»"
+    assert err["message"] == "Слово «ESCALATE» уже есть в отделе «Переговоры»"
 
 
 def test_create_word_errors(db, admin_client, make_user):
@@ -134,7 +135,7 @@ def test_create_deck(db, admin_client, client):
     assert r.status_code == 201 and data["kind"] == "shared"
     assert data["unlock_condition"] == "Откроется, когда вы выучите 20 слов в отделе «Офис»"
     assert data["locked"] is True
-    assert client.get("/api/v1/decks").json()["meta"]["total_items"] == 5
+    assert client.get("/api/v1/decks").json()["meta"]["total_items"] == len(DECKS) + 1
     r = admin_client.post(f"{API}/decks", json={"title": "Конференция"})
     assert r.status_code == 409 and r.json()["error"]["code"] == "deck_title_taken"
 

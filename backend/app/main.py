@@ -20,6 +20,7 @@ from app.core.middleware import CSRFMiddleware, RequestContextMiddleware
 from app.core.ratelimit import limiter
 from app.decks.router import router as decks_router
 from app.learning.router import router as learning_router
+from app.speech.router import router as speech_router
 from app.system.router import router as system_router
 from app.users.router import router as users_router
 from app.words.router import router as words_router
@@ -62,7 +63,7 @@ def create_app() -> FastAPI:
                             status_code=429, headers={"Retry-After": "60"})
 
     for r in (system_router, auth_router, users_router, decks_router, words_router,
-              learning_router, admin_router):
+              learning_router, speech_router, admin_router):
         app.include_router(r, prefix=API_PREFIX)
 
     @app.get("/docs", include_in_schema=False)

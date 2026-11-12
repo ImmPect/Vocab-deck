@@ -6,6 +6,7 @@ from sqlalchemy import select
 from app.decks.models import Deck
 from app.learning.models import UserWordProgress
 from app.words.models import Word
+from app.seed_data import WORDS
 
 API = "/api/v1"
 
@@ -31,11 +32,12 @@ def test_guest_lists_published_words_sorted(db, client):
     r = client.get(f"{API}/decks/{deck_id}/words", params={"limit": 3})
     body = r.json()
     assert r.status_code == 200
-    assert body["meta"] == {"page": 1, "limit": 3, "total_items": 8}
-    assert [w["en"] for w in body["data"]] == ["agenda", "colleague", "deadline"]
+    expected = sorted((w[0] for w in WORDS["Офис"]), key=str.lower)
+    assert body["meta"] == {"page": 1, "limit": 3, "total_items": len(expected)}
+    assert [w["en"] for w in body["data"]] == expected[:3]
     assert "progress" not in body["data"][0]
     page3 = client.get(f"{API}/decks/{deck_id}/words", params={"limit": 3, "page": 3}).json()["data"]
-    assert len(page3) == 2
+    assert [w["en"] for w in page3] == expected[6:9]
 
 
 def test_user_sees_word_progress(db, make_user, make_client):

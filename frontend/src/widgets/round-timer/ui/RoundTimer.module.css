@@ -1,0 +1,9 @@
+.wrap { display: flex; align-items: center; gap: 12px; margin: 8px 0 20px; }
+.timer { flex: 1; height: 10px; border-radius: 99px; background: rgba(240, 233, 219, 0.12); overflow: hidden; }
+.timer i { display: block; height: 100%; background: var(--amber); transition: width 0.25s linear; }
+.low i { background: var(--red); }
+.left { font-size: 13px; color: var(--on-desk-soft); min-width: 92px; text-align: right; font-variant-numeric: tabular-nums; }
+.lowText { color: #ff9a8f; font-weight: 600; }
+@media (prefers-reduced-motion: reduce) {
+  .timer i { transition: none; }
+}

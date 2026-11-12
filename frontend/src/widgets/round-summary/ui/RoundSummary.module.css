@@ -1,0 +1,19 @@
+.result { max-width: 480px; margin: 0 auto; padding: 28px 26px; text-align: center; }
+.h { font-family: var(--font-hand); font-size: 44px; margin: 0; line-height: 1; outline: none; }
+.score { font-size: 15px; color: var(--ink-soft); margin: 10px 0 14px; }
+.score b { color: var(--ink); }
+.pending { font-size: 13px; background: var(--paper-2); border-radius: 8px; padding: 8px 10px; margin: 0 0 14px; }
+.promo { border: 2px dashed var(--sage); border-radius: 12px; padding: 14px; margin: 0 0 16px; background: rgba(110, 139, 99, 0.1); }
+.role { font-family: var(--font-hand); font-size: 34px; color: var(--ink-blue); font-weight: 700; line-height: 1.1; }
+.unlocked { font-size: 13px; color: var(--ink-soft); margin-top: 6px; }
+.next { font-size: 14px; color: var(--ink-soft); margin: 0 0 14px; }
+.ach { font-size: 14px; margin: 0 0 14px; }
+.log { list-style: none; padding: 0; margin: 0 0 18px; text-align: left; font-size: 14px; }
+.log li { display: grid; grid-template-columns: 22px 1fr 1fr; gap: 8px; padding: 7px 4px; border-top: 1px solid #e0d5b8; }
+.word { font-weight: 600; }
+.tr { color: var(--ink-soft); }
+.correct > span:first-child { color: var(--sage-deep); font-weight: 700; }
+.wrong > span:first-child { color: var(--red); font-weight: 700; }
+.deferred, .skipped { color: var(--ink-soft); }
+.save { background: var(--paper-2); border-radius: 10px; padding: 12px 14px; font-size: 13px; line-height: 1.45; text-align: left; margin-bottom: 14px; }
+.actions { display: flex; flex-direction: column; gap: 10px; }

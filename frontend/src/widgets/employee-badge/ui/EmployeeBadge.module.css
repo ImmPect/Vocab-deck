@@ -1,0 +1,31 @@
+.badge { position: relative; padding: 20px 20px 20px; }
+.clip {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  width: 54px;
+  height: 16px;
+  margin-left: -27px;
+  border-radius: 5px;
+  background: #7b6a52;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.25);
+}
+.who { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; }
+.photo {
+  width: 54px;
+  height: 62px;
+  flex: none;
+  border-radius: 6px;
+  background: var(--paper-2);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-hand);
+  font-size: 30px;
+  color: var(--ink-soft);
+}
+.role { font-family: var(--font-hand); font-weight: 700; font-size: 32px; line-height: 1; color: var(--ink-blue); }
+.name { font-size: 13px; color: var(--ink-soft); margin-top: 4px; }
+.xpRow { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--ink-soft); margin-bottom: 6px; }
+.streak { display: flex; gap: 8px; align-items: center; margin-top: 14px; font-size: 13px; color: var(--ink-soft); }
+.streak b { color: var(--ink); font-size: 15px; }
+.freeze { margin-left: auto; background: var(--paper-2); border-radius: 99px; padding: 2px 9px; font-size: 12px; }

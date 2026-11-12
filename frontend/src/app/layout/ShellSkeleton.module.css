@@ -1,0 +1,11 @@
+.page { display: flex; flex-direction: column; gap: 14px; }
+.grid { display: grid; gap: 16px; margin-top: 10px; }
+.shell { min-height: 100dvh; padding: 16px; }
+.bare { min-height: 100dvh; padding: 32px 16px; max-width: 560px; margin: 0 auto; }
+.side { display: none; }
+@media (min-width: 768px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+  .shell { display: grid; grid-template-columns: var(--side-w) 1fr; gap: 32px; padding: 0 32px 0 0; }
+  .side { display: block; background: rgba(0, 0, 0, 0.14); }
+  .shell .page { padding-top: 36px; }
+}

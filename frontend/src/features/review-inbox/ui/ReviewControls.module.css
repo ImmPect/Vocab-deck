@@ -1,0 +1,6 @@
+.controls {
+  display: flex;
+  gap: 12px;
+  width: min(330px, 100%);
+}
+.controls > * { flex: 1; }

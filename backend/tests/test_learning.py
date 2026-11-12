@@ -119,7 +119,11 @@ def test_user_retry_same_event_no_double_xp(client, db, user_client):
 
 
 def test_repeat_same_day_zero_xp(client, db, user_client):
-    deck = deck_id(db, "Собеседование")  # 6 слов: второй раунд повторит слова первого
+    deck = deck_id(db, "Собеседование")
+    # В отделе оставляем 6 опубликованных слов: второй раунд обязательно повторит слова первого
+    for w in db.scalars(select(Word).where(Word.deck_id == deck).order_by(Word.id)).all()[6:]:
+        w.status = "archived"
+    db.commit()
     rid = start(user_client, deck).json()["data"]["round_id"]
     first_words = {question(db, rid, q)["word_id"] for q in range(1, 6)}
     for q in range(1, 6):
@@ -140,6 +144,8 @@ def test_repeat_same_day_zero_xp(client, db, user_client):
 def test_round_prefers_due_words(client, db, make_user, make_client):
     user = make_user()
     words = db.scalars(select(Word).where(Word.deck_id == deck_id(db, "Офис")).order_by(Word.id)).all()
+    for w in words[8:]:  # в отделе остаются 8 слов: 5 не созрели, 1 созрело, 2 новых
+        w.status = "archived"
     today = date.today()
     for w in words[:5]:  # 5 слов не созрели
         db.add(UserWordProgress(user_id=user.id, word_id=w.id, direction="en_ru", box=3,
